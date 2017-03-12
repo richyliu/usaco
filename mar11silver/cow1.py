@@ -37,23 +37,21 @@ lines = read('pairup')
 
 
 # init variables
-pairs = int(lines[0])
+dataLength = int(lines[0].split(' ')[0])
+cows = []
 maxTime = 0 # minimize this
 
 
-smallest = 1e9
-largest = 0
-# find smallest and largest
-for i in range(1, pairs + 1):
+
+for i in range(1, dataLength + 1):
     cur = int(lines[i].split(' ')[1])
-    if cur < smallest:
-        smallest = cur
-    if cur > largest:
-        largest = cur
+    cows += [cur] * int(lines[i].split(' ')[0])
+pairs = len(cows)
+cows = sort(cows)
 
 
-# longest time is first and last
-maxTime = smallest + largest
+# longest time could be center two or first and last
+maxTime = max(cows[pairs // 2 - 1] + cows[pairs // 2], cows[0] + cows[pairs - 1])
 
 
 print(maxTime)
