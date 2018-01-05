@@ -21,7 +21,9 @@ public class beads {
         if(!f.exists())
             f.createNewFile();
 		BufferedReader reader = new BufferedReader(new FileReader(fileName + ".in"));
-        PrintWriter printer = new PrintWriter(new BufferedWriter(new FileWriter(fileName + ".out")));
+//        PrintWriter printer = new PrintWriter(new BufferedWriter(new FileWriter(fileName + ".out")));
+		PrintWriter printer = new PrintWriter(new BufferedWriter(new FileWriter("testtest.out")));
+        
         
         int numBeads = Integer.parseInt(reader.readLine());
         String beads = reader.readLine();
@@ -41,6 +43,21 @@ public class beads {
         int end = 0;
         boolean lastRed = beads.charAt(numBeads-1) == 114;
         boolean curRed = false;
+        
+        
+        // if all same color
+        for (int i = 0; i < numBeads; i++) {
+        	if ((beads.charAt(i) == 114 && curRed) == (beads.charAt(i) == 98 && !curRed)) {
+        		if (i == numBeads-1) {
+        			System.out.println("output: " + numBeads);
+        			printer.println(numBeads);
+        			return;
+        		}
+        	} else {
+        		break;
+        	}
+        }
+        
         
         for (int i = 0; i < numBeads*2; i++) {
         	if (beads.charAt(i) == 114) curRed = true;
@@ -63,9 +80,33 @@ public class beads {
         	System.out.println(start + ", " + mid + ", " + end + "; " + longestMid + ", " + longestBeads);
         }
         
+        beads = new StringBuffer(beads).reverse().toString();
+        lastRed = beads.charAt(numBeads-1) == 114;
+        for (int i = 0; i < numBeads*2; i++) {
+        	if (beads.charAt(i) == 114) curRed = true;
+        	else if (beads.charAt(i) == 98) curRed = false;
+        	else if (beads.charAt(i) == 119) continue;
+        	
+        	// beads switch color
+        	if (lastRed != curRed) {
+        		start = mid;
+        		mid = end;
+        		end = i;
+        	}
+        	// longest so far?
+        	if (end - start > longestBeads) {
+        		longestBeads = end - start;
+        		longestMid = mid;
+        		System.out.println(start + ", " + mid + ", " + end + ", " + longestBeads);
+        	}
+        	lastRed = curRed;
+        	System.out.println(start + ", " + mid + ", " + end + "; " + longestMid + ", " + longestBeads);
+        }
         
+        
+        System.out.println("output: " + longestBeads);
         // save output
-        printer.write(longestBeads + "\n");
+        printer.println(longestBeads);
         
         // closing
         reader.close();
