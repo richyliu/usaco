@@ -7,7 +7,6 @@ using namespace std;
 
 #define fori(x) for(int i = 0; i < x; i++)
 #define forj(x) for(int j = 0; j < x; j++)
-#define for2(x) fori(x) forj(x)
 #define for2(x, y) fori(x) forj(y)
 
 #define println cout << endl

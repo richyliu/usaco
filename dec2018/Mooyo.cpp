@@ -51,7 +51,7 @@ bool remove_connected(int row, int col, int height, int width, int K) {
     checkboardif(-1, 0);
   }
 
-  if (remove.size() < K) return false;
+  if ((int)remove.size() < K) return false;
   while (!remove.empty()) {
     next = remove.front();
     remove.pop();
@@ -64,7 +64,6 @@ bool remove_connected(int row, int col, int height, int width, int K) {
 
 void apply_gravity(int height, int width) {
   int swapwith = 0;
-  short temp = 0;
   for(int i = 0; i < width; i++) {
     swapwith = height - 1;
     for(int j = height - 1; j >= 0; j--) {
