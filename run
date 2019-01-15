@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Compiles and runs a c++ program. If a second parameter is provided, the COUT
+# macro will be passed on to the comiler
+
+if [[ $# -gt 1 ]]
+then
+  # g++ -std=c++11 $1 -o ${1%.*}.out && ./${1%.*}.out
+  g++ -DCOUT -std=c++11 $1 -o /tmp/a.out && /tmp/a.out 
+else
+  g++ -std=c++11 $1 -o /tmp/a.out && /tmp/a.out 
+fi
