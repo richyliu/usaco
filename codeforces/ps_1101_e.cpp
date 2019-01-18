@@ -42,14 +42,15 @@ int main() {
   cin.tie(NULL);
 	
 	ll n = 0;
-	cin >> n;
+	fastscan(n);
 	
 	char next;
 	// height and width, a supposed to be greater than b
 	ll h = 0, w = 0, a = 0, b = 0, swp = 0;
 	
 	for(int i = 0; i < n; i++) {
-	  cin >> next;
+	  next = getchar();
+	  getchar();
 	  fastscan(a);
 	  fastscan(b);
 		if (a < b) {
