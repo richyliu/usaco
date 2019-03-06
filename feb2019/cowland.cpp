@@ -1,7 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 #include <queue>
+#include <unordered_map>
+#include <string>
 using namespace std;
 
 
@@ -13,6 +16,8 @@ typedef pair<int, int> pii;
 typedef vector<int> vi;
 typedef queue<int> qi;
 
+unordered_map<string, int> cache;
+
 struct lookable {
   int index;
   vi pathTo;
@@ -20,9 +25,17 @@ struct lookable {
 
 int N;
 vi paths[100001];
+int enjoyments[100000];
 
 
-vi dijkstra(int start, int end) {
+string hash2(int a, int b) {
+  ostringstream stringStream = ostringstream();
+  stringStream << a << " " << b;
+  return stringStream.str();
+}
+
+
+int bfs(int start, int end) {
   bool lookedAt[N];
   fori(N) lookedAt[i] = false;
 
@@ -42,9 +55,28 @@ vi dijkstra(int start, int end) {
       if (!lookedAt[el]) {
         if (el == end) {
           cur.pathTo.emplace_back(end);
-          return cur.pathTo;
+
+          int result = 0;
+          for (int el : cur.pathTo)
+            result  ^= enjoyments[el];
+          return result;
         } else {
           /* cout << "el: " << el << "\n"; */
+          cout << "req: " << el << " -> " << end << endl;
+          if (cache.find(hash2(el, end)) != cache.end()) {
+            cout << "cache req: " << cache[hash2(el, end)] << endl;
+            int result = 0;
+            for (vi::size_type i = 0; i < cur.pathTo.size(); i++) {
+              result ^= enjoyments[cur.pathTo[i]];
+              cout << "OOO " << enjoyments[cur.pathTo[i]] << endl;
+            }
+            result ^= enjoyments[el];
+            cout << "OOO " << enjoyments[el] << endl;
+            result ^= cache[hash2(el, end)];
+            cout << "OOO " << cache[hash2(el, end)] << endl;
+            return result;
+          }
+
           newVec = cur.pathTo;
           newVec.emplace_back(el);
           look.push({ el, newVec });
@@ -54,7 +86,8 @@ vi dijkstra(int start, int end) {
     }
   }
 
-  return vi();
+  cout << "oh no!\n";
+  return -1;
 }
 
 
@@ -77,6 +110,7 @@ void fastscan(int &number) {
 }
 
 
+
 int main() {
   fin.open("cowland.in");
   ofstream fout; fout.open("cowland.out");
@@ -90,7 +124,6 @@ int main() {
   fastscan(N);
   fastscan(Q);
 
-  int enjoyments[N];
   fori(N) fastscan(enjoyments[i]);
 
   int from = 0, to = 0;
@@ -115,12 +148,12 @@ int main() {
     fastscan(to);
     if (type == 2) {
       from--; to--;
-      vi route = dijkstra(from, to);
-      int cur = 0;
-      for (int el : route)
-        cur ^= enjoyments[el];
-      /* cout << cur << "\n"; */
-      fout << cur << "\n";
+      int result = bfs(from, to);
+
+      cache[hash2(from, to)] = result;
+      cout << "path " << from << " -> " << to << " ...";
+      cout << result << "\n";
+      /* fout << result << "\n"; */
     } else {
       from--;
       enjoyments[from] = to;
