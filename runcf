@@ -2,4 +2,4 @@
 
 # Compiles and runs a c++ program with data.txt as the input
 
-g++ -std=c++11 $1 -o /tmp/a.out && cat data.txt | /tmp/a.out
+g++ -std=c++11 -O3 -fstack-protector-all -Wall $1 -o /tmp/a.out && cat data.txt | /tmp/a.out
